@@ -1,0 +1,36 @@
+version: '3.2'
+
+networks:
+  net:
+    driver: overlay
+
+services:
+  nginx:
+    image: my-nginx:latest
+    hostname: nginx
+    ports: 
+      - "80:80"
+    environment:
+      - PLATFORM=test
+    networks:
+      net:
+  drupal:
+    image: drupal:latest
+    hostname: drupal
+    environment:
+      - PLATFORM=test
+    networks:
+      net:
+  db:
+    image: mariadb:10.4
+    hostname: mariadb
+    environment:
+      - PLATFORM=test
+      - MYSQL_ROOT_PASSWORD=temp
+    volumes:
+      - type: bind
+        source: /data/disk/mysql
+        target: /var/lib/mysql
+    networks:
+      net:
+
